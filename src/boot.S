@@ -3,13 +3,13 @@
 .type start, @function
 .global _start
 _start:
-	la gp, _global_pointer
+	la gp, __global_pointer
 	// setup stack
-	la sp, _stack
+	la sp, __stack
 	// setup bss
-	la t0, _bss_start
+	la t0, __bss_start
 	sd x0, 0(t0)
-	la t1, _bss_end
+	la t1, __bss_end
 	.clear_bss:
 		addi t0, t0, 8
 		sd x0, 0(t0)

@@ -16,7 +16,6 @@ void init_chunk_header(
 	chunk_header_t* prev,
 	chunk_header_t* next
 ) {
-	//putline("i am initing");
 	header->magic = CHUNK_HEADER_MAGIC;
 	header->state = state;
 	header->size = size;
@@ -25,7 +24,6 @@ void init_chunk_header(
 }
 void init_heap(void) {
 	min_addr_chunk = (chunk_header_t*) &__heap_start;
-	//putline("im going to init chunk header");
 	init_chunk_header(
 		min_addr_chunk,
 		false,
@@ -33,7 +31,7 @@ void init_heap(void) {
 		NULL,
 		NULL
 	);
-	//putline("done");
+
 }
 
 void* kmalloc(size_t size) {
@@ -44,28 +42,18 @@ void* kmalloc(size_t size) {
 	if (size & 0x7) {
 		size += 8 - (size & 0x7);
 	}
-	//putline("loggers 1");
-	//char n1[20];
-	//itoa(size,n1,10);
-	//putline(n1);
 	chunk_header_t* current = min_addr_chunk;
 	while (current) {
 		if (!current->state) {
 			if (current->size == size) {
-				//putline("we are equal");
 				current->state = true;
 				return current + sizeof(chunk_header_t);
 			} else if (current->size > size) {
-				//putline("i am greater");
 				// "fragment"/split up the chunk
 				size_t remaining = current->size - size;
 				current->size = size;
 				if (remaining > sizeof(chunk_header_t)) {
 					chunk_header_t* new_header = current+size;
-					//putline("diff=");
-					//char z[20];
-					//itoa(new_header-current,z,10);
-					//putline(z);
 					init_chunk_header(
 						new_header,
 						false,
@@ -74,17 +62,6 @@ void* kmalloc(size_t size) {
 						current->next
 					);
 				}
-				//char n[20];
-				//putline("im going to do a diff");
-				//itoa((void*)(current+sizeof(chunk_header_t))-(void*)&__heap_start,n,10);
-				//itoa((void*)(current)+sizeof(chunk_header_t)-(void*)&__heap_start,n,10);
-				//itoa(GET_PTR(current)-(void*)&__heap_start,n,10);
-				//putline(n);
-				//itoa(sizeof(chunk_header_t),n,10);
-				//putline("loggers");
-				//putline(n);
-				
-				//return current + sizeof(chunk_header_t);
 				return GET_PTR(current);
 			}
 		}

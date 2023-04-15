@@ -90,7 +90,7 @@ void* krealloc(void* ptr, size_t size) {
 		// there's no point in a 0 length chunk
 		// so it's > not <=
 		if (remaining > sizeof(chunk_header_t)) {
-			chunk_header_t* new_header = ptr+size;
+			chunk_header_t* new_header = (chunk_header_t*) ((void*)ptr+size);
 			init_chunk_header(
 				new_header,
 				false,

@@ -10,10 +10,12 @@ _start:
 	la t0, __bss_start
 	sd x0, 0(t0)
 	la t1, __bss_end
+	// Load stack into mscratch for interrupts
+	csrw mscratch, sp
 	.clear_bss:
 		addi t0, t0, 8
 		sd x0, 0(t0)
 		bltu t0, t1, .clear_bss 
 	// jump to main
-	tail kmain
+	call kmain
 	.loop: j .loop

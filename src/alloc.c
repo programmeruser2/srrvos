@@ -2,10 +2,6 @@
 #include <srvos/string.h>
 #include <stdbool.h>
 
-// debug stuff
-#include <srvos/console.h>
-#include <srvos/string.h>
-
 extern unsigned char __heap_start;
 extern unsigned char __heap_size;
 chunk_header_t* min_addr_chunk;

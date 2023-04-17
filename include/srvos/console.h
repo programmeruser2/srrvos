@@ -4,4 +4,5 @@ void putchar(char c);
 void puts(char* s);
 void putline(char* s);
 char getchar(void);
+void printf(char* fmt, ...);
 #endif

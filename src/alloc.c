@@ -1,5 +1,6 @@
 #include <srvos/alloc.h> 
 #include <srvos/string.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 extern unsigned char __heap_start;
@@ -29,7 +30,7 @@ void init_heap(void) {
 	);
 
 }
-
+//#include <srvos/console.h>
 void* kmalloc(size_t size) {
 	if (size == 0) {
 		return NULL;
@@ -43,13 +44,15 @@ void* kmalloc(size_t size) {
 		if (!current->state) {
 			if (current->size == size) {
 				current->state = true;
-				return current + sizeof(chunk_header_t);
+				return GET_PTR(current);
 			} else if (current->size > size) {
+				//putline("choose greater");
 				// "fragment"/split up the chunk
 				size_t remaining = current->size - size;
 				current->size = size;
+				current->state = true;
 				if (remaining > sizeof(chunk_header_t)) {
-					chunk_header_t* new_header = current+size;
+					chunk_header_t* new_header = (chunk_header_t*) (((uint8_t*) current)+size);
 					init_chunk_header(
 						new_header,
 						false,
@@ -57,6 +60,7 @@ void* kmalloc(size_t size) {
 						current,
 						current->next
 					);
+					current->next = new_header;
 				}
 				return GET_PTR(current);
 			}
@@ -86,7 +90,7 @@ void* krealloc(void* ptr, size_t size) {
 		// there's no point in a 0 length chunk
 		// so it's > not <=
 		if (remaining > sizeof(chunk_header_t)) {
-			chunk_header_t* new_header = (chunk_header_t*) ((void*)ptr+size);
+			chunk_header_t* new_header = (chunk_header_t*) ((uint8_t*)ptr+size);
 			init_chunk_header(
 				new_header,
 				false,

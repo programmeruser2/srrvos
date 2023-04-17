@@ -17,29 +17,29 @@ void strcat(char* str1, char* str2) {
 	}
 }
 
-void itoa(int number, char* str, int base) {
+void itoa(unsigned long long number, char* str, unsigned int base) {
 	if (number == 0) {
 		str[0] = '0';
 		str[1] = '\0';
 		return;
 	}
-	bool sign = number < 0;
-	if (sign) number = -number;
+	//bool sign = number < 0;
+	//if (sign) number = -number;
 	size_t len = 0;
 	while (number != 0) {
-		int d = number % base;
+		unsigned long long d = number % base;
 		number = (number - d) / base;
-		if (0 <= d && d <= 9) {
-			str[len] = d + '0';
+		if (d <= 9) {
+			str[len] = (char)d + '0';
 		} else {
-			str[len] = d - 10 + 'a';
+			str[len] = (char)d - 10 + 'a';
 		}
 		++len;
 	}
-	if (sign) {
+	/*if (sign) {
 		str[len] = '-';
 		++len;
-	}
+	}*/
 	// reverse string
 	size_t bound;
 	if (len % 2 == 0) bound = len/2;

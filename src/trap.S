@@ -1,6 +1,5 @@
 .align 4
 .global mtrap
-.type mtrap, @function
 
 .altmacro
 .macro save_gpreg i, base=t6

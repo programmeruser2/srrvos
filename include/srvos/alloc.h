@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 #define CHUNK_HEADER_MAGIC 0xAB
-#define GET_HEADER(ptr) ((chunk_header_t*) ptr - sizeof(chunk_header_t))
-#define GET_PTR(header) ((void*)(header) + sizeof(chunk_header_t))
+#define GET_HEADER(ptr) ((chunk_header_t*) ((uint8_t*)ptr - sizeof(chunk_header_t)))
+#define GET_PTR(header) ((uint8_t*)(header) + sizeof(chunk_header_t))
 typedef struct chunk_header chunk_header_t;
 struct chunk_header {
 	uint8_t magic;

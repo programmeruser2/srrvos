@@ -5,7 +5,7 @@ CFLAGS += -I include -g -nostdlib -fno-builtin -Wall -Wextra -ffreestanding -mcm
 CFLAGS += -Wall -Wextra -Wpedantic -Werror -Wshadow -Wformat=2 -Wconversion -Wunused-parameter
 LDFLAGS += -T linker.ld
 CC = riscv64-unknown-elf-gcc
-kernel.elf: $(sources)
+kernel.elf: $(sources) $(wildcard include/*)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(sources) -o kernel.elf
 qemu: all
 	qemu-system-riscv64 -machine virt -bios none -kernel kernel.elf

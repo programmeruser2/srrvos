@@ -22,9 +22,7 @@ char getchar(void) {
 	while ((*(uart + 5) & 1) == 0);
 	return *uart;
 }
-void printf(char* s, ...) {
-	va_list ap;
-	va_start(ap, s);
+void vprintf(char* s, va_list ap) {
 	char tmp[20];
 	while (*s) {
 		switch (*s) {
@@ -67,4 +65,9 @@ void printf(char* s, ...) {
 		}
 		++s;
 	}
+}
+void printf(char* fmt, ...) {
+	va_list ap;
+	va_start(ap, fmt);
+	vprintf(fmt, ap);
 }
